@@ -4,6 +4,7 @@ const newBookBtn = document.querySelector(".NewBook");
 const BookTitle = document.querySelector(".Title");
 const BookAuthor = document.querySelector(".Author");
 const BookPages = document.querySelector(".Pages");
+const isRead = document.querySelector(".isRead");
 const form = document.querySelector(".form");
 let deletebtn;
 const myLibrary = [];
@@ -37,6 +38,22 @@ function makeCards(curr){
         pages.classList.add("pages");
         pages.innerHTML = `${curr.pages} pages`;
         card.appendChild(pages);
+
+    
+
+        if (curr.read.checked){
+            const readDiv = document.createElement("div");
+            readDiv.classList.add("readDiv");
+            readDiv.innerHTML = "read";
+            card.appendChild(readDiv);
+            
+        } else {
+            const readDiv = document.createElement("div");
+            readDiv.classList.add("notReadDiv");
+            readDiv.innerHTML =  "Not read";
+            card.appendChild(readDiv);
+        };
+
         deletebtn = document.createElement("button");
         deletebtn.innerHTML = "delete";
         card.appendChild(deletebtn);
@@ -61,12 +78,11 @@ newFormBtn.addEventListener("click", function(){
 
 newBookBtn.addEventListener("click", function(){
     inputField();
-    let newBook = new book(BookTitle.value,BookAuthor.value,BookPages.value, "no");
+    let newBook = new book(BookTitle.value,BookAuthor.value,BookPages.value, isRead);
     myLibrary.push(newBook);
     getIndex();
     form.classList.remove("flexDisplay");
     resetForm();
-    console.log(myLibrary);
 
 })
 
