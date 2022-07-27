@@ -9,6 +9,7 @@ const form = document.querySelector(".form");
 let deletebtn;
 const myLibrary = [];
 let counter = 0;
+let readDiv;
 
 function resetForm(){
     BookTitle.value = "";
@@ -23,6 +24,7 @@ function resetForm(){
 function makeCards(curr){
     const card = document.createElement("div");
     card.id = counter;
+    curr.id = counter;
 
         card.classList.add("book")
         container.appendChild(card);
@@ -39,23 +41,30 @@ function makeCards(curr){
         pages.innerHTML = `${curr.pages} pages`;
         card.appendChild(pages);
 
-    
-
         if (curr.read.checked){
-            const readDiv = document.createElement("div");
+           const readDiv = document.createElement("div");
             readDiv.classList.add("readDiv");
             readDiv.innerHTML = "read";
-            card.appendChild(readDiv);
-            
-        } else {
-            const readDiv = document.createElement("div");
+            readDiv.addEventListener("click", function(){
+                curr.checked(readDiv);    
+             })
+            card.appendChild(readDiv); 
+         } else {
+           const readDiv = document.createElement("div");
             readDiv.classList.add("notReadDiv");
             readDiv.innerHTML =  "Not read";
+            readDiv.addEventListener("click", function(){
+                curr.checked(readDiv);        
+             })
             card.appendChild(readDiv);
         };
 
+       
+
+
         deletebtn = document.createElement("button");
         deletebtn.innerHTML = "delete";
+        deletebtn.classList.add("deleteBtn");
         card.appendChild(deletebtn);
         counter = counter + 1;
         deletebtn.addEventListener("click", function(){
@@ -66,10 +75,6 @@ function makeCards(curr){
 }
 
 
-function getIndex(){
-    let index = myLibrary.length-1;
-   makeCards(myLibrary[index]);
-};
 
 newFormBtn.addEventListener("click", function(){
     form.classList.add("flexDisplay");
@@ -80,7 +85,7 @@ newBookBtn.addEventListener("click", function(){
     inputField();
     let newBook = new book(BookTitle.value,BookAuthor.value,BookPages.value, isRead);
     myLibrary.push(newBook);
-    getIndex();
+    makeCards(newBook);
     form.classList.remove("flexDisplay");
     resetForm();
 
@@ -115,10 +120,22 @@ function book (title, author,pages,read){
     this.author = author;
     this.pages = pages;
     this.read = read
-    this.info = function(){
-        return(`${this.title} by ${this.author} has ${this.pages} pages, ${this.read}`)
+    this.checked = function(readDiv){
+        if (read.checked){
+            readDiv.classList.remove("readDiv");
+            readDiv.classList.add("notReadDiv");
+            readDiv.innerHTML ="Not Read"
+            read.checked = false;
+
+        } else if (!(read.checked)) {
+            readDiv.classList.remove("notReadDiv");
+            readDiv.classList.add("readDiv");
+            readDiv.innerHTML ="Read"
+            read.checked = true;
+        };
     }
-}
+    };
+
 
 
 function takeEntries (){
